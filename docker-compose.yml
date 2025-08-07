@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+  uploader-api:
+    build:
+      context: ./dataset-uploader-api
+    ports:
+      - "8001:8080"
+    volumes:
+      - ./integration_tests:/app/integration_tests
+      - ./data:/app/data   # <-- shared folder for uploads
+    networks:
+      - ai-net
+
+  profiler-api:
+    build:
+      context: ./data-profiler-api
+    ports:
+      - "8002:8080"
+    depends_on:
+      - uploader-api
+    volumes:
+      - ./integration_tests:/app/integration_tests
+      - ./data:/app/data   # <-- same shared folder here
+    networks:
+      - ai-net
+
+networks:
+  ai-net:
+    driver: bridge
