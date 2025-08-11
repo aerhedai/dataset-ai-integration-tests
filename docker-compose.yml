@@ -1,42 +1,40 @@
 version: '3.9'
 services:
-  uploader-api:
+  dataset-uploader-api:
     build:
       context: ./dataset-uploader-api
     ports:
       - "8001:8080"
     volumes:
       - ./integration_tests:/app/integration_tests
-      - ./data:/app/data   # <-- shared folder for uploads
+      - ./data:/app/data
     networks:
       - ai-net
-
-  profiler-api:
+  data-profiler-api:
     build:
       context: ./data-profiler-api
     ports:
       - "8002:8080"
-    depends_on:
-      - uploader-api
     volumes:
       - ./integration_tests:/app/integration_tests
-      - ./data:/app/data   # <-- same shared folder here
+      - ./data:/app/data
     networks:
       - ai-net
-
-  cleaner-api:
+    depends_on:
+      - dataset-uploader-api
+  data-cleaner-api:
     build:
       context: ./data-cleaner-api
     ports:
       - "8003:8080"
-    depends_on:
-      - profiler-api
     volumes:
       - ./integration_tests:/app/integration_tests
-      - ./data:/app/data   # <-- same shared folder here
+      - ./data:/app/data
     networks:
       - ai-net
-
+    depends_on:
+      - data-profiler-api
 networks:
   ai-net:
     driver: bridge
+

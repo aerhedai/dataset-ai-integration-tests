@@ -1,0 +1,41 @@
+[
+  {
+    "name": "dataset-uploader-api",
+    "repo": "https://github.com/aerhedai/dataset-uploader-api",
+    "path": "dataset-uploader-api",
+    "port": 8001,
+    "internal_port": 8080,
+    "test_endpoint": {
+      "path": "/upload",
+      "method": "post",
+      "upload_file": true,
+      "required": true
+    }
+  },
+  {
+    "name": "data-profiler-api",
+    "repo": "https://github.com/aerhedai/data-profiler-api",
+    "path": "data-profiler-api",
+    "port": 8002,
+    "internal_port": 8080,
+    "test_endpoint": {
+      "path": "/profile",
+      "method": "get",
+      "query_param": "dataset_id",
+      "required": false
+    }
+  },
+  {
+    "name": "data-cleaner-api",
+    "repo": "https://github.com/aerhedai/data-cleaner-api",
+    "path": "data-cleaner-api",
+    "port": 8003,
+    "internal_port": 8080,
+    "test_endpoint": {
+      "path": "/clean",
+      "method": "post",
+      "json_key": "dataset_id",
+      "required": false
+    }
+  }
+]
