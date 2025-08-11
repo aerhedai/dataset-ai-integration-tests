@@ -1,30 +1,31 @@
-name: Integration Tests
-on: [push, pull_request]
 jobs:
   test_pipeline:
     runs-on: ubuntu-latest
-    services:
-      dataset-uploader-api:
-        image: dataset-uploader-api:latest
-        ports:
-          - 8001:8080
-      data-profiler-api:
-        image: data-profiler-api:latest
-        ports:
-          - 8002:8080
-      data-cleaner-api:
-        image: data-cleaner-api:latest
-        ports:
-          - 8003:8080
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Set up Docker Compose
+        run: |
+          docker-compose --version
+
+      - name: Build and start all services
+        run: docker-compose up -d --build
+
+      - name: Wait for APIs to start
+        run: sleep 10
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
+
       - name: Install dependencies
         run: pip install requests
-      - name: Wait for APIs to start
-        run: sleep 10
+
       - name: Run integration tests
         run: python integration_tests/test_pipeline.py
+
+      - name: Tear down
+        run: docker-compose down
