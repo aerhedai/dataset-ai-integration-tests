@@ -4,3 +4,6 @@
 [submodule "dataset-uploader-api"]
 	path = dataset-uploader-api
 	url = https://github.com/aerhedai/dataset-uploader-api
+[submodule "data-cleaner-api"]
+	path = data-cleaner-api
+	url = https://github.com/aerhedai/data-cleaner-api

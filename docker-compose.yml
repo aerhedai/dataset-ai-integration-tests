@@ -24,6 +24,19 @@ services:
     networks:
       - ai-net
 
+  cleaner-api:
+    build:
+      context: ./data-cleaner-api
+    ports:
+      - "8003:8080"
+    depends_on:
+      - profiler-api
+    volumes:
+      - ./integration_tests:/app/integration_tests
+      - ./data:/app/data   # <-- same shared folder here
+    networks:
+      - ai-net
+
 networks:
   ai-net:
     driver: bridge
