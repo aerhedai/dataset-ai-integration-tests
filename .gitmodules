@@ -8,5 +8,5 @@
 
 [submodule "data-cleaner-api"]
 	path = data-cleaner-api
-	url = https://github.com/aerhedai/data-cleaner-api.git
+	url = https://github.com/aerhedai/data-cleaner-api
 

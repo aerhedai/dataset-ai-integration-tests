@@ -29,7 +29,7 @@ for idx, api in enumerate(apis):
         f"      - \"{api['port']}:{api['internal_port']}\"",
         "    volumes:",
         "      - ./integration_tests:/app/integration_tests",
-        "      - ./data:/app/data",
+        "      - ./uploaded_files:/app/uploaded_files",
         "    networks:",
         "      - ai-net",
     ]
@@ -61,29 +61,29 @@ workflow_lines = [
     "jobs:",
     "  test_pipeline:",
     "    runs-on: ubuntu-latest",
-    "    services:"
-]
-
-for api in apis:
-    workflow_lines.append(f"      {api['name']}:")
-    workflow_lines.append(f"        image: {api['name']}:latest")
-    workflow_lines.append(f"        ports:")
-    workflow_lines.append(f"          - {api['port']}:{api['internal_port']}")
-
-workflow_lines.extend([
     "    steps:",
-    "      - uses: actions/checkout@v2",
-    "      - name: Set up Python",
-    "        uses: actions/setup-python@v2",
-    "        with:",
-    "          python-version: '3.x'",
-    "      - name: Install dependencies",
-    "        run: pip install requests",
-    "      - name: Wait for APIs to start",
-    "        run: sleep 10",
-    "      - name: Run integration tests",
-    "        run: python integration_tests/test_pipeline.py"
-])
+    "    - name: Checkout repository with submodules",
+    "      uses: actions/checkout@v3",
+    "      with:",
+    "        submodules: true",
+    "    - name: Initialize and update submodules",
+    "      run: git submodule update --init --recursive",
+    "    - name: Build and start APIs with Docker Compose",
+    "      run: docker compose up -d --build",
+    "    - name: Wait for APIs to start",
+    "      run: sleep 15",
+    "    - name: Set up Python",
+    "      uses: actions/setup-python@v4",
+    "      with:",
+    "        python-version: '3.x'",
+    "    - name: Install dependencies",
+    "      run: pip install requests",
+    "    - name: Run integration tests",
+    "      run: python integration_tests/test_pipeline.py",
+    "    - name: Tear down Docker Compose",
+    "      if: always()",
+    "      run: docker compose down"
+]
 
 with open(os.path.join(workflow_dir, "integration-test.yml"), "w") as f:
     f.write("\n".join(workflow_lines) + "\n")
