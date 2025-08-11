@@ -22,6 +22,19 @@ This is the first official release of the **Dataset AI Integration Tests** proje
   - Shared volume (`uploaded_files/`) for file exchange
 - 🧪 Sample dataset included for testing
 
+## [1.1.0] - 2025-08-11
+
+### ✨ Added
+- Integrated **data-cleaner-api** into the pipeline testing suite.
+- Updated `test_pipeline.py` to:
+  - Upload dataset via uploader API.
+  - Profile dataset with profiler API.
+  - Clean dataset using cleaner API.
+  - Print responses and reports at each stage.
+- Extended Docker Compose to include cleaner-api service with shared volumes and networking.
+- Enhanced pipeline coverage for end-to-end dataset processing.
+
+
 ### 📁 Directory Structure
 
 - `integration_tests/`: Contains CSV and test logic

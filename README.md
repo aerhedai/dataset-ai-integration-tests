@@ -31,10 +31,6 @@ dataset-ai-integration-tests/
 - Python 3.8+
 - Docker + Docker Compose installed
 - Clone the necessary API repos into this directory:
-  ```bash
-  git clone https://github.com/aerhedai/dataset-uploader-api.git
-  git clone https://github.com/aerhedai/data-profiler-api.git
-  ```
 
 > Or link them as Git submodules for better modularity.
 
@@ -53,6 +49,7 @@ This will:
 - Map ports:
   - Uploader: [http://localhost:8001](http://localhost:8001)
   - Profiler: [http://localhost:8002](http://localhost:8002)
+  - All other apis in the pipeline...
 - Mount a **shared volume** at `./uploaded_files` inside both containers for file handoff.
 
 ---
@@ -87,82 +84,11 @@ Profile Output: {
 
 ---
 
-## 🔁 How File Sharing Works
-
-- The **uploader saves** files to: `/app/uploaded_files/{file_id}.csv`
-- The **profiler reads** files from: `/app/uploaded_files/{file_id}.csv`
-- Both services mount the same host path (`./uploaded_files`) to ensure access.
-
----
-
-## 🐞 Troubleshooting
-
-| Issue | Cause | Fix |
-|------|-------|-----|
-| `415 Unsupported Media Type` | Wrong file format in upload | Ensure you're sending `multipart/form-data` with correct MIME |
-| `405 Method Not Allowed` | Wrong HTTP method | Check you’re using `POST` not `GET` |
-| `500 Internal Server Error` from profiler | File not found | Ensure shared volume is working and file path matches |
-| `FileNotFoundError` on `sample_dataset.csv` | Wrong relative path | Ensure you run test from repo root |
-
----
-
-## 🧪 `test_pipeline.py` Summary
-
-```python
-with open('integration_tests/sample_dataset.csv', 'rb') as f:
-    files = {"file": ("sample_dataset.csv", f, "application/octet-stream")}
-    upload_res = requests.post("http://localhost:8001/upload", files=files)
-
-file_id = upload_res.json()["file_id"]
-file_path = f"/app/uploaded_files/{file_id}.csv"
-
-profile_res = requests.post("http://localhost:8002/profile", params={"dataset_id": file_id})
-```
-
-Note: Adjust if your profiler uses JSON body instead of query params.
-
----
-
 ## 🧹 Cleanup
 
 ```bash
 docker-compose down --volumes
 ```
-
----
-
-## 🔧 docker-compose.yml Overview
-
-```yaml
-version: '3.9'
-services:
-  uploader-api:
-    build: ./dataset-uploader-api
-    ports:
-      - "8001:8080"
-    volumes:
-      - ./integration_tests:/app/integration_tests
-      - ./uploaded_files:/app/uploaded_files
-    networks:
-      - ai-net
-
-  profiler-api:
-    build: ./data-profiler-api
-    ports:
-      - "8002:8080"
-    depends_on:
-      - uploader-api
-    volumes:
-      - ./integration_tests:/app/integration_tests
-      - ./uploaded_files:/app/uploaded_files
-    networks:
-      - ai-net
-
-networks:
-  ai-net:
-    driver: bridge
-```
-
 ---
 
 ## 🧠 Authors & Credits
