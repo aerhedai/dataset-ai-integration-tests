@@ -1,0 +1,27 @@
+name: Integration Tests
+on: [push, pull_request]
+jobs:
+  test_pipeline:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository with submodules
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+    - name: Initialize and update submodules
+      run: git submodule update --init --recursive
+    - name: Build and start APIs with Docker Compose
+      run: docker compose up -d --build
+    - name: Wait for APIs to start
+      run: sleep 15
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: pip install requests
+    - name: Run integration tests
+      run: python integration_tests/test_pipeline.py
+    - name: Tear down Docker Compose
+      if: always()
+      run: docker compose down
