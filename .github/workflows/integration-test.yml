@@ -8,19 +8,18 @@ jobs:
 
     steps:
     - name: Checkout repository with submodules
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
-        submodules: recursive
+        submodules: true
 
-    - name: Set up Docker Compose
-      run: |
-        docker compose up -d --build
+    - name: Build and start APIs with Docker Compose
+      run: docker compose up -d --build
 
     - name: Wait for APIs to start
       run: sleep 35
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.x'
 
