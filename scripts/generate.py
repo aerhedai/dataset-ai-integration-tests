@@ -29,7 +29,7 @@ for idx, api in enumerate(apis):
         f"      - \"{api['port']}:{api['internal_port']}\"",
         "    volumes:",
         "      - ./integration_tests:/app/integration_tests",
-        "      - ./uploaded_files:/app/uploaded_files",
+        "      - ./data:/app/data",
         "    networks:",
         "      - ai-net",
     ]

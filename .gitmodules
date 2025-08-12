@@ -10,3 +10,15 @@
 	path = data-cleaner-api
 	url = https://github.com/aerhedai/data-cleaner-api
 
+[submodule "data-preparation-imputation"]
+	path = data-preparation-api
+	url = https://github.com/aerhedai/data-preparation-api
+
+[submodule "data-preparation-leakage"]
+	path = data-preparation-api
+	url = https://github.com/aerhedai/data-preparation-api
+
+[submodule "data-preparation-features"]
+	path = data-preparation-api
+	url = https://github.com/aerhedai/data-preparation-api
+

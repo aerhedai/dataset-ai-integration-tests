@@ -37,5 +37,44 @@
       "json_key": "dataset_id",
       "required": false
     }
+  },
+  {
+    "name": "data-preparation-imputation",
+    "repo": "https://github.com/aerhedai/data-preparation-api",
+    "path": "data-preparation-api",
+    "port": 8004,
+    "internal_port": 8080,
+    "test_endpoint": {
+      "path": "/impute",
+      "method": "post",
+      "json_key": "dataset_id",
+      "required": false
+    }
+  },
+  {
+    "name": "data-preparation-leakage",
+    "repo": "https://github.com/aerhedai/data-preparation-api",
+    "path": "data-preparation-api",
+    "port": 8004,
+    "internal_port": 8080,
+    "test_endpoint": {
+      "path": "/leakage",
+      "method": "post",
+      "json_key": "dataset_id",
+      "required": false
+    }
+  },
+  {
+    "name": "data-preparation-features",
+    "repo": "https://github.com/aerhedai/data-preparation-api",
+    "path": "data-preparation-api",
+    "port": 8004,
+    "internal_port": 8080,
+    "test_endpoint": {
+      "path": "/features",
+      "method": "post",
+      "json_key": "dataset_id",
+      "required": false
+    }
   }
 ]
