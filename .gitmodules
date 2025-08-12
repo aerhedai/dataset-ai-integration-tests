@@ -10,3 +10,7 @@
 	path = data-cleaner-api
 	url = https://github.com/aerhedai/data-cleaner-api
 
+[submodule "data-preparation-api"]
+	path = data-preparation-api
+	url = https://github.com/aerhedai/data-preparation-api
+

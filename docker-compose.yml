@@ -7,7 +7,7 @@ services:
       - "8001:8080"
     volumes:
       - ./integration_tests:/app/integration_tests
-      - ./uploaded_files:/app/uploaded_files
+      - ./data:/app/data
     networks:
       - ai-net
   data-profiler-api:
@@ -17,7 +17,7 @@ services:
       - "8002:8080"
     volumes:
       - ./integration_tests:/app/integration_tests
-      - ./uploaded_files:/app/uploaded_files
+      - ./data:/app/data
     networks:
       - ai-net
     depends_on:
@@ -29,11 +29,23 @@ services:
       - "8003:8080"
     volumes:
       - ./integration_tests:/app/integration_tests
-      - ./uploaded_files:/app/uploaded_files
+      - ./data:/app/data
     networks:
       - ai-net
     depends_on:
       - data-profiler-api
+  data-preparation-api:
+    build:
+      context: ./data-preparation-api
+    ports:
+      - "8004:8080"
+    volumes:
+      - ./integration_tests:/app/integration_tests
+      - ./data:/app/data
+    networks:
+      - ai-net
+    depends_on:
+      - data-cleaner-api
 networks:
   ai-net:
     driver: bridge
