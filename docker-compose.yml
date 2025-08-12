@@ -34,7 +34,7 @@ services:
       - ai-net
     depends_on:
       - data-profiler-api
-  data-preparation-imputation:
+  data-preparation-api:
     build:
       context: ./data-preparation-api
     ports:
@@ -46,30 +46,6 @@ services:
       - ai-net
     depends_on:
       - data-cleaner-api
-  data-preparation-leakage:
-    build:
-      context: ./data-preparation-api
-    ports:
-      - "8004:8080"
-    volumes:
-      - ./integration_tests:/app/integration_tests
-      - ./data:/app/data
-    networks:
-      - ai-net
-    depends_on:
-      - data-preparation-imputation
-  data-preparation-features:
-    build:
-      context: ./data-preparation-api
-    ports:
-      - "8004:8080"
-    volumes:
-      - ./integration_tests:/app/integration_tests
-      - ./data:/app/data
-    networks:
-      - ai-net
-    depends_on:
-      - data-preparation-leakage
 networks:
   ai-net:
     driver: bridge
